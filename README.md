@@ -1,9 +1,9 @@
-![Bot](https://github.com/sanyarnd/java-course-2023-backend-template/actions/workflows/bot.yml/badge.svg)
-![Scrapper](https://github.com/sanyarnd/java-course-2023-backend-template/actions/workflows/scrapper.yml/badge.svg)
+![Bot](https://github.com/MrKekMan04/java-course-2023-backend/actions/workflows/bot.yml/badge.svg)
+![Scrapper](https://github.com/MrKekMan04/java-course-2023-backend/actions/workflows/scrapper.yml/badge.svg)
 
 # Link Tracker
 
-ФИО: ...
+ФИО: Ефимов Виталий Сергеевич
 
 Приложение для отслеживания обновлений контента по ссылкам.
 При появлении новых событий отправляется уведомление в Telegram.
