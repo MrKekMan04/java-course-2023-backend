@@ -2,8 +2,10 @@ package edu.java.bot.bot;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
+import com.pengrad.telegrambot.model.BotCommand;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
+import com.pengrad.telegrambot.request.SetMyCommands;
 import edu.java.bot.command.Command;
 import edu.java.bot.configuration.ApplicationConfig;
 import java.util.List;
@@ -21,6 +23,7 @@ public class Bot extends TelegramBot {
 
         this.commands = commands;
         this.setUpdatesListener(this::onTelegramUpdateReceived);
+        this.setUpMenuCommands();
     }
 
     private int onTelegramUpdateReceived(List<Update> updates) {
@@ -59,5 +62,11 @@ public class Bot extends TelegramBot {
     private void processNonCommandMessage(Long chatId, String message) {
         LOGGER.info("[Chat id: %s] process text: %s".formatted(chatId, message));
         execute(new SendMessage(chatId, "Введите команду. Доступные команды: /help"));
+    }
+
+    private void setUpMenuCommands() {
+        execute(new SetMyCommands(commands.stream()
+            .map(Command::toApiCommand)
+            .toArray(BotCommand[]::new)));
     }
 }
