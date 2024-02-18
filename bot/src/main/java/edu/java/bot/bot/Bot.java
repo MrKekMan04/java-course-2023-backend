@@ -54,7 +54,7 @@ public class Bot extends TelegramBot {
         boolean isCommandFind = false;
 
         for (Command command : commands) {
-            if (message.startsWith(command.command())) {
+            if (isCommandMatched(message, command.command())) {
                 isCommandFind = true;
                 execute(command.handle(update));
             }
@@ -63,6 +63,11 @@ public class Bot extends TelegramBot {
         if (!isCommandFind) {
             execute(new SendMessage(chatId, "Неизвестная команда. Доступные команды: /help"));
         }
+    }
+
+    private boolean isCommandMatched(String message, String command) {
+        return message.startsWith(command)
+            && (message.length() == command.length() || message.charAt(command.length()) == ' ');
     }
 
     private void processNonCommandMessage(Long chatId, String message) {
