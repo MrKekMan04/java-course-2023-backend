@@ -12,16 +12,18 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class UnTrackCommand implements Command {
+    private static final String COMMAND_NAME = "/untrack";
+    private static final String COMMAND_DESCRIPTION = "Прекратить отслеживание ссылки";
     private final UserChatRepository chatRepository;
 
     @Override
     public String command() {
-        return "/untrack";
+        return COMMAND_NAME;
     }
 
     @Override
     public String description() {
-        return "Прекратить отслеживание ссылки";
+        return COMMAND_DESCRIPTION;
     }
 
     @Override

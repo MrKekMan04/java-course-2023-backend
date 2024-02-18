@@ -12,16 +12,18 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class TrackCommand implements Command {
+    private static final String COMMAND_NAME = "/track";
+    private static final String COMMAND_DESCRIPTION = "Начать отслеживание ссылки";
     private final UserChatRepository chatRepository;
 
     @Override
     public String command() {
-        return "/track";
+        return COMMAND_NAME;
     }
 
     @Override
     public String description() {
-        return "Начать отслеживание ссылки";
+        return COMMAND_DESCRIPTION;
     }
 
     @Override

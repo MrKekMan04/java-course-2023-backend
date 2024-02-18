@@ -10,16 +10,18 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class HelpCommand implements Command {
+    private static final String COMMAND_NAME = "/help";
+    private static final String COMMAND_DESCRIPTION = "Вывести окно с командами";
     private final List<Command> commands;
 
     @Override
     public String command() {
-        return "/help";
+        return COMMAND_NAME;
     }
 
     @Override
     public String description() {
-        return "Вывести окно с командами";
+        return COMMAND_DESCRIPTION;
     }
 
     @Override

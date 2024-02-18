@@ -11,16 +11,18 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class ListCommand implements Command {
+    private static final String COMMAND_NAME = "/list";
+    private static final String COMMAND_DESCRIPTION = "Показать список отслеживаемых ссылок";
     private final UserChatRepository chatRepository;
 
     @Override
     public String command() {
-        return "/list";
+        return COMMAND_NAME;
     }
 
     @Override
     public String description() {
-        return "Показать список отслеживаемых ссылок";
+        return COMMAND_DESCRIPTION;
     }
 
     @Override

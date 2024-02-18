@@ -13,16 +13,18 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class StartCommand implements Command {
+    private static final String COMMAND_NAME = "/start";
+    private static final String COMMAND_DESCRIPTION = "Зарегистрировать пользователя";
     private final UserChatRepository repository;
 
     @Override
     public String command() {
-        return "/start";
+        return COMMAND_NAME;
     }
 
     @Override
     public String description() {
-        return "Зарегистрировать пользователя";
+        return COMMAND_DESCRIPTION;
     }
 
     @Override
