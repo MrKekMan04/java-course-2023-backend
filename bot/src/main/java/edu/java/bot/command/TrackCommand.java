@@ -29,24 +29,20 @@ public class TrackCommand implements Command {
     @Override
     public SendMessage handle(Update update) {
         Long chatId = update.message().chat().id();
-
         String[] parameters = update.message().text().split(" ");
 
         if (parameters.length != 2) {
             return new SendMessage(chatId, "Неверный синтаксис команды");
         }
-
         if (!LinkUtil.isLinkCorrect(parameters[1])) {
             return new SendMessage(chatId, "Ссылка некорректна");
         }
-
         UserChat userChat = chatRepository.findById(chatId);
         List<String> trackingLinks = userChat.getTrackingLinks();
 
         if (trackingLinks.contains(parameters[1])) {
             return new SendMessage(chatId, "Ссылка уже отслеживается");
         }
-
         trackingLinks.add(parameters[1]);
         chatRepository.add(new UserChat(userChat.getChatId(), trackingLinks));
 
