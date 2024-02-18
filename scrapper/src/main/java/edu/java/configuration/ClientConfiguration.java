@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class ClientConfiguration {
     private final ApplicationConfig config;
-
     @Bean
     public GitHubClient gitHubClient() {
         return new GitHubClient(config.client().gitHub());
