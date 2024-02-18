@@ -22,8 +22,14 @@ public class Bot extends TelegramBot {
         super(config.telegramToken());
 
         this.commands = commands;
-        this.setUpdatesListener(this::onTelegramUpdateReceived);
         this.setUpMenuCommands();
+        this.setUpdatesListener(this::onTelegramUpdateReceived);
+    }
+
+    private void setUpMenuCommands() {
+        execute(new SetMyCommands(commands.stream()
+            .map(Command::toApiCommand)
+            .toArray(BotCommand[]::new)));
     }
 
     private int onTelegramUpdateReceived(List<Update> updates) {
@@ -62,11 +68,5 @@ public class Bot extends TelegramBot {
     private void processNonCommandMessage(Long chatId, String message) {
         LOGGER.info("[Chat id: %s] process text: %s".formatted(chatId, message));
         execute(new SendMessage(chatId, "Введите команду. Доступные команды: /help"));
-    }
-
-    private void setUpMenuCommands() {
-        execute(new SetMyCommands(commands.stream()
-            .map(Command::toApiCommand)
-            .toArray(BotCommand[]::new)));
     }
 }
