@@ -5,6 +5,7 @@ import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.entity.UserChat;
 import edu.java.bot.repository.UserChatRepository;
 import edu.java.bot.util.LinkUtil;
+import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -34,16 +35,18 @@ public class UnTrackCommand implements Command {
         if (parameters.length != 2) {
             return new SendMessage(chatId, "Неверный синтаксис команды");
         }
-        if (!LinkUtil.isLinkCorrect(parameters[1])) {
+        URI link = LinkUtil.parse(parameters[1]);
+
+        if (link == null) {
             return new SendMessage(chatId, "Ссылка некорректна");
         }
         UserChat userChat = chatRepository.findById(chatId);
         List<String> trackingLinks = userChat.getTrackingLinks();
 
-        if (!trackingLinks.contains(parameters[1])) {
+        if (!trackingLinks.contains(link.toString())) {
             return new SendMessage(chatId, "Ссылка не отслеживается");
         }
-        trackingLinks.remove(parameters[1]);
+        trackingLinks.remove(link.toString());
         chatRepository.add(new UserChat(userChat.getChatId(), trackingLinks));
 
         return new SendMessage(chatId, "Ссылка успешно удалена из отслеживаемых");

@@ -1,26 +1,22 @@
 package edu.java.bot.util;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.net.URI;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public final class LinkUtil {
-    private static final Pattern LINK_PATTERN =
-        Pattern.compile("^https://([^.]+\\.)*(?<secondLevelDomain>[^. ]+)\\.(?<firstLevelDomain>[^. ]+)(/([^. ]+)?)?");
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private LinkUtil() {
     }
 
-    public static boolean isLinkCorrect(String link) {
-        return LINK_PATTERN.matcher(link).matches();
-    }
-
-    public static String getSecondLevelDomain(String link) {
-        Matcher linkMatcher = LINK_PATTERN.matcher(link);
-
-        if (linkMatcher.matches()) {
-            return linkMatcher.group("secondLevelDomain");
+    public static URI parse(String link) {
+        try {
+            URI uri = URI.create(link);
+            return uri.getHost() != null && uri.getPath() != null ? uri : null;
+        } catch (IllegalArgumentException e) {
+            LOGGER.error(e);
+            return null;
         }
-
-        return null;
     }
 }
