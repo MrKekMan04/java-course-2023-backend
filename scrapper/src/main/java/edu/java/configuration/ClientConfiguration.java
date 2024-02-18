@@ -30,11 +30,6 @@ public class ClientConfiguration {
 
     @Bean
     public BotClient botClient() {
-        return new BotClient(config.client().bot());
-    }
-
-    @Bean
-    public BotClient botClient() {
-        return new BotClient(config.client().bot());
+        return new BotClient(config.apiLink().bot());
     }
 }
