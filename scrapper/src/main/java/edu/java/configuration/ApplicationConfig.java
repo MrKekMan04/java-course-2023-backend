@@ -15,6 +15,6 @@ public record ApplicationConfig(
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }
 
-    public record ApiLink(String gitHub, String stackOverflow) {
+    public record ApiLink(String gitHub, String stackOverflow, String bot) {
     }
 }
