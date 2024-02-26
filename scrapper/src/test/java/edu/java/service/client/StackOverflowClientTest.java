@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class StackOverflowClientTest {
     @RegisterExtension
-    private static final WireMockExtension WIRE_MOCK_SERVER = WireMockExtension.newInstance()
+    public static final WireMockExtension WIRE_MOCK_SERVER = WireMockExtension.newInstance()
         .options(WireMockConfiguration.wireMockConfig().dynamicPort())
         .build();
 
