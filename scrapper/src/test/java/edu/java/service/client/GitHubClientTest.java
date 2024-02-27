@@ -27,7 +27,7 @@ public class GitHubClientTest {
 
     @DynamicPropertySource
     private static void configureProperties(DynamicPropertyRegistry registry) {
-        registry.add("app.client.git-hub", WIRE_MOCK_SERVER::baseUrl);
+        registry.add("app.api-link.git-hub", WIRE_MOCK_SERVER::baseUrl);
     }
 
     @Autowired

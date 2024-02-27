@@ -10,11 +10,11 @@ import org.springframework.validation.annotation.Validated;
 public record ApplicationConfig(
     @NotNull
     Scheduler scheduler,
-    LinkClient client
+    ApiLink apiLink
 ) {
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }
 
-    public record LinkClient(String gitHub, String stackOverflow) {
+    public record ApiLink(String gitHub, String stackOverflow) {
     }
 }

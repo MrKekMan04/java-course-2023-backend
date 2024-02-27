@@ -27,7 +27,7 @@ public class StackOverflowClientTest {
 
     @DynamicPropertySource
     private static void configureProperties(DynamicPropertyRegistry registry) {
-        registry.add("app.client.stack-overflow", WIRE_MOCK_SERVER::baseUrl);
+        registry.add("app.api-link.stack-overflow", WIRE_MOCK_SERVER::baseUrl);
     }
 
     @Autowired

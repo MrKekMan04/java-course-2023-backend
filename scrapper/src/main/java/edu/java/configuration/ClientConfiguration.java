@@ -13,11 +13,11 @@ public class ClientConfiguration {
 
     @Bean
     public GitHubClient gitHubClient() {
-        return new GitHubClient(config.client().gitHub());
+        return new GitHubClient(config.apiLink().gitHub());
     }
 
     @Bean
     public StackOverflowClient stackOverflowClient() {
-        return new StackOverflowClient(config.client().stackOverflow());
+        return new StackOverflowClient(config.apiLink().stackOverflow());
     }
 }
