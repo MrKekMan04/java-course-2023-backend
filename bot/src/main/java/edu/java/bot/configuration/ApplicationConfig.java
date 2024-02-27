@@ -9,8 +9,8 @@ import org.springframework.validation.annotation.Validated;
 public record ApplicationConfig(
     @NotEmpty
     String telegramToken,
-    LinkClient client
+    ApiLink apiLink
 ) {
-    public record LinkClient(String scrapper) {
+    public record ApiLink(String scrapper) {
     }
 }

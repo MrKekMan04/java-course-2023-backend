@@ -36,7 +36,7 @@ public class ScrapperClientTest {
 
     @DynamicPropertySource
     public static void configureRegistry(DynamicPropertyRegistry registry) {
-        registry.add("app.client.scrapper", WIRE_MOCK_SERVER::baseUrl);
+        registry.add("app.api-link.scrapper", WIRE_MOCK_SERVER::baseUrl);
     }
 
     @Autowired

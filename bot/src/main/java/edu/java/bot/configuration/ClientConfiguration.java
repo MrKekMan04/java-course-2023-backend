@@ -12,6 +12,6 @@ public class ClientConfiguration {
 
     @Bean
     public ScrapperClient scrapperClient() {
-        return new ScrapperClient(config.client().scrapper());
+        return new ScrapperClient(config.apiLink().scrapper());
     }
 }

@@ -27,7 +27,7 @@ public class BotClientTest {
 
     @DynamicPropertySource
     public static void configureRegistry(DynamicPropertyRegistry registry) {
-        registry.add("app.client.bot", WIRE_MOCK_SERVER::baseUrl);
+        registry.add("app.api-link.bot", WIRE_MOCK_SERVER::baseUrl);
     }
 
     @Autowired

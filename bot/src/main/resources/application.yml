@@ -1,6 +1,6 @@
 app:
   telegram-token: ${TELEGRAM_BOT_API_KEY}
-  client:
+  api-link:
     scrapper: ${SCRAPPER_BASE_URL:http://localhost:8080}
 
 spring:
