@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class BotClientTest {
     @RegisterExtension
-    private static final WireMockExtension WIRE_MOCK_SERVER = WireMockExtension.newInstance()
+    public static final WireMockExtension WIRE_MOCK_SERVER = WireMockExtension.newInstance()
         .options(WireMockConfiguration.wireMockConfig().dynamicPort())
         .build();
     private static final String LINK_UPDATES_URI = "/updates";
