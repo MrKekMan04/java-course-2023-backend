@@ -1,21 +1,24 @@
 package edu.java.bot.command;
 
 import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.model.request.ParseMode;
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.entity.UserChat;
-import edu.java.bot.repository.UserChatRepository;
+import edu.java.bot.entity.dto.RemoveLinkRequest;
+import edu.java.bot.exception.ApiErrorResponseException;
+import edu.java.bot.service.client.ScrapperClient;
 import edu.java.bot.util.LinkUtil;
 import java.net.URI;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
 
 @Component
 @RequiredArgsConstructor
 public class UnTrackCommand implements Command {
     private static final String COMMAND_NAME = "/untrack";
     private static final String COMMAND_DESCRIPTION = "Прекратить отслеживание ссылки";
-    private final UserChatRepository chatRepository;
+    private final ScrapperClient client;
 
     @Override
     public String command() {
@@ -36,19 +39,30 @@ public class UnTrackCommand implements Command {
             return new SendMessage(chatId, "Неверный синтаксис команды");
         }
         URI link = LinkUtil.parse(parameters[1]);
-
         if (link == null) {
             return new SendMessage(chatId, "Ссылка некорректна");
         }
-        UserChat userChat = chatRepository.findById(chatId);
-        List<String> trackingLinks = userChat.getTrackingLinks();
 
-        if (!trackingLinks.contains(link.toString())) {
-            return new SendMessage(chatId, "Ссылка не отслеживается");
-        }
-        trackingLinks.remove(link.toString());
-        chatRepository.add(new UserChat(userChat.getChatId(), trackingLinks));
+        return new SendMessage(chatId, getResponseMessage(chatId, link))
+            .disableWebPagePreview(true)
+            .parseMode(ParseMode.Markdown);
+    }
 
-        return new SendMessage(chatId, "Ссылка успешно удалена из отслеживаемых");
+    private String getResponseMessage(Long chatId, URI link) {
+        return client.removeLink(chatId, new RemoveLinkRequest(link))
+            .map(response -> {
+                if (HttpStatus.OK.equals(response.getStatusCode())
+                    && response.getBody() != null) {
+                    return "[Ссылка](%s) успешно удалена из отслеживаемых"
+                        .formatted(response.getBody().url());
+                }
+
+                return "Что-то пошло не так!";
+            })
+            .onErrorResume(
+                ApiErrorResponseException.class,
+                error -> Mono.just(error.getApiErrorResponse().description())
+            )
+            .block();
     }
 }
