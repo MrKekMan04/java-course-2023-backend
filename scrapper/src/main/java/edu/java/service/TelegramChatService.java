@@ -19,7 +19,9 @@ public class TelegramChatService {
             throw new TelegramChatAlreadyRegistered(id);
         });
 
-        chatRepository.save(new TelegramChat(id, new ArrayList<>()));
+        chatRepository.save(new TelegramChat()
+            .setId(id)
+            .setLinks(new ArrayList<>()));
     }
 
     public void deleteChat(@PathVariable Long id) {

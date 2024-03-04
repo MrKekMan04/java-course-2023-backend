@@ -41,7 +41,9 @@ public class LinkService {
         }
 
         Link link = linkRepository.findByUrl(request.link())
-            .orElse(linkRepository.save(new Link(new Random().nextLong(), request.link())));
+            .orElse(linkRepository.save(new Link()
+                .setId(new Random().nextLong())
+                .setUrl(request.link())));
         chatLinks.add(link);
         telegramChat.setLinks(chatLinks);
         chatRepository.save(telegramChat);
