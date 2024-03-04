@@ -10,11 +10,15 @@ import org.springframework.validation.annotation.Validated;
 public record ApplicationConfig(
     @NotNull
     Scheduler scheduler,
-    ApiLink apiLink
+    ApiLink apiLink,
+    DebugInformation debugInformation
 ) {
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }
 
     public record ApiLink(String gitHub, String stackOverflow, String bot) {
+    }
+
+    public record DebugInformation(Integer apiErrorResponseStackTraceListLength) {
     }
 }
