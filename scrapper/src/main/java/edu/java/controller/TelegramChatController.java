@@ -1,5 +1,7 @@
 package edu.java.controller;
 
+import edu.java.entity.dto.DeleteChatResponse;
+import edu.java.entity.dto.RegisterChatResponse;
 import edu.java.service.TelegramChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,12 +17,12 @@ public class TelegramChatController {
     private final TelegramChatService chatService;
 
     @PostMapping("/{id}")
-    public void registerChat(@PathVariable Long id) {
-        chatService.registerChat(id);
+    public RegisterChatResponse registerChat(@PathVariable Long id) {
+        return chatService.registerChat(id);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteChat(@PathVariable Long id) {
-        chatService.deleteChat(id);
+    public DeleteChatResponse deleteChat(@PathVariable Long id) {
+        return chatService.deleteChat(id);
     }
 }
