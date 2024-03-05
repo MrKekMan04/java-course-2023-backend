@@ -1,10 +1,12 @@
 package edu.java.bot.command;
 
-import edu.java.bot.entity.UserChat;
-import java.util.List;
+import com.pengrad.telegrambot.request.SendMessage;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.http.ResponseEntity;
+import reactor.core.publisher.Mono;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class StartCommandTest extends CommandTest {
     private Command startCommand;
@@ -13,7 +15,7 @@ public class StartCommandTest extends CommandTest {
     public void setUp() {
         super.setUp();
 
-        startCommand = new StartCommand(userChatRepository);
+        startCommand = new StartCommand(client);
     }
 
     @Test
@@ -28,12 +30,10 @@ public class StartCommandTest extends CommandTest {
 
     @Test
     public void assertThatNewUserAddInRepository() {
-        startCommand.handle(update);
+        Mockito.doReturn(Mono.just(ResponseEntity.ok().build())).when(client).registerChat(chatId);
 
-        UserChat userChat = userChatRepository.findById(chatId);
+        SendMessage handle = startCommand.handle(update);
 
-        assertNotNull(userChat);
-        assertEquals(chatId, userChat.getChatId());
-        assertEquals(List.of(), userChat.getTrackingLinks());
+        assertTrue(handle.getParameters().get("text").toString().contains("Вы успешно были зарегистрированы!"));
     }
 }

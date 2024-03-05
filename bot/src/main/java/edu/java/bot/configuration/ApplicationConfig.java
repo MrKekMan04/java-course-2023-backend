@@ -8,6 +8,9 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties(prefix = "app", ignoreUnknownFields = false)
 public record ApplicationConfig(
     @NotEmpty
-    String telegramToken
+    String telegramToken,
+    ApiLink apiLink
 ) {
+    public record ApiLink(String scrapper) {
+    }
 }

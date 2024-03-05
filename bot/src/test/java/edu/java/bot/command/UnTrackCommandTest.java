@@ -1,10 +1,13 @@
 package edu.java.bot.command;
 
-import edu.java.bot.entity.UserChat;
-import java.util.ArrayList;
-import java.util.List;
+import edu.java.bot.entity.dto.ApiErrorResponse;
+import edu.java.bot.entity.dto.LinkResponse;
+import edu.java.bot.exception.ApiErrorResponseException;
+import java.net.URI;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.http.ResponseEntity;
+import reactor.core.publisher.Mono;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class UnTrackCommandTest extends CommandTest {
@@ -14,7 +17,7 @@ public class UnTrackCommandTest extends CommandTest {
     public void setUp() {
         super.setUp();
 
-        unTrackCommand = new UnTrackCommand(userChatRepository);
+        unTrackCommand = new UnTrackCommand(client);
     }
 
     @Test
@@ -44,10 +47,13 @@ public class UnTrackCommandTest extends CommandTest {
     @Test
     public void assertThatUnTrackExistingLinkReturnedRightResponse() {
         Mockito.doReturn("/untrack https://github.com").when(message).text();
-        userChatRepository.add(new UserChat(chatId, new ArrayList<>(List.of("https://github.com"))));
+        URI uri = Mockito.spy(URI.create("https://github.com"));
+
+        Mockito.doReturn(Mono.just(ResponseEntity.ok().body(new LinkResponse(0L, uri))))
+            .when(client).removeLink(Mockito.any(), Mockito.any());
 
         assertEquals(
-            "Ссылка успешно удалена из отслеживаемых",
+            "[Ссылка](%s) успешно удалена из отслеживаемых".formatted(uri),
             unTrackCommand.handle(update).getParameters().get("text")
         );
     }
@@ -55,7 +61,10 @@ public class UnTrackCommandTest extends CommandTest {
     @Test
     public void assertThatUnTrackNotExistingLinkReturnedRightResponse() {
         Mockito.doReturn("/untrack https://github.com").when(message).text();
-        userChatRepository.add(new UserChat(chatId, new ArrayList<>()));
+        ApiErrorResponse mock = Mockito.mock(ApiErrorResponse.class);
+        Mockito.doReturn("Ссылка не отслеживается").when(mock).description();
+        Mockito.doReturn(Mono.error(new ApiErrorResponseException(mock)))
+            .when(client).removeLink(Mockito.any(), Mockito.any());
 
         assertEquals("Ссылка не отслеживается", unTrackCommand.handle(update).getParameters().get("text"));
     }

@@ -11,7 +11,7 @@ public class HelpCommandTest extends CommandTest {
     public void setUp() {
         super.setUp();
 
-        helpCommand = new HelpCommand(List.of(new StartCommand(userChatRepository)));
+        helpCommand = new HelpCommand(List.of(new StartCommand(client)));
     }
 
     @Test

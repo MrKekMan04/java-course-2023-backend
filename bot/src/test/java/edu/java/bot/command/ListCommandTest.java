@@ -1,9 +1,13 @@
 package edu.java.bot.command;
 
-import edu.java.bot.entity.UserChat;
+import edu.java.bot.entity.dto.LinkResponse;
+import edu.java.bot.entity.dto.ListLinksResponse;
+import java.net.URI;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.http.ResponseEntity;
+import reactor.core.publisher.Mono;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ListCommandTest extends CommandTest {
@@ -13,7 +17,7 @@ public class ListCommandTest extends CommandTest {
     public void setUp() {
         super.setUp();
 
-        listCommand = new ListCommand(userChatRepository);
+        listCommand = new ListCommand(client);
     }
 
     @Test
@@ -28,15 +32,28 @@ public class ListCommandTest extends CommandTest {
 
     @Test
     public void assertThatEmptyListOfTrackingLinksHandleReturnedRightString() {
-        Mockito.doReturn(new UserChat(1L, List.of())).when(userChatRepository).findById(Mockito.any(Long.class));
+        final String expected = "Вы не отслеживаете ни одной ссылки";
 
-        assertEquals("Вы не отслеживаете ни одной ссылки", listCommand.handle(update).getParameters().get("text"));
+        Mockito.doReturn(Mono.just(ResponseEntity.ok().body(new ListLinksResponse(List.of(), 0))))
+            .when(client).getAllLinksForChat(chatId);
+
+        assertEquals(expected, listCommand.handle(update).getParameters().get("text"));
     }
 
     @Test
     public void assertThatNotEmptyListOfTrackingLinksHandleReturnedRightString() {
-        Mockito.doReturn(new UserChat(1L, List.of("link"))).when(userChatRepository).findById(Mockito.any(Long.class));
+        final String expected = "Отслеживаемые ссылки:\n1: http://localhost:8080\n";
 
-        assertEquals("Отслеживаемые ссылки:\n1: link\n", listCommand.handle(update).getParameters().get("text"));
+        Mockito.doReturn(Mono.just(ResponseEntity.ok()
+                .body(new ListLinksResponse(
+                    List.of(new LinkResponse(0L, URI.create("http://localhost:8080"))),
+                    1
+                ))))
+            .when(client).getAllLinksForChat(chatId);
+
+        assertEquals(
+            expected,
+            listCommand.handle(update).getParameters().get("text")
+        );
     }
 }

@@ -1,10 +1,14 @@
 package edu.java.bot.command;
 
-import edu.java.bot.entity.UserChat;
-import java.util.ArrayList;
-import java.util.List;
+import edu.java.bot.entity.dto.AddLinkRequest;
+import edu.java.bot.entity.dto.ApiErrorResponse;
+import edu.java.bot.entity.dto.LinkResponse;
+import edu.java.bot.exception.ApiErrorResponseException;
+import java.net.URI;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.http.ResponseEntity;
+import reactor.core.publisher.Mono;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TrackCommandTest extends CommandTest {
@@ -14,7 +18,7 @@ public class TrackCommandTest extends CommandTest {
     public void setUp() {
         super.setUp();
 
-        trackCommand = new TrackCommand(userChatRepository);
+        trackCommand = new TrackCommand(client);
     }
 
     @Test
@@ -44,7 +48,11 @@ public class TrackCommandTest extends CommandTest {
     @Test
     public void assertThatAlreadyAddedLinkReturnedRightResponse() {
         Mockito.doReturn("/track https://github.com").when(message).text();
-        userChatRepository.add(new UserChat(chatId, new ArrayList<>(List.of("https://github.com"))));
+
+        ApiErrorResponse mock = Mockito.mock(ApiErrorResponse.class);
+        Mockito.doReturn("Ссылка уже отслеживается").when(mock).description();
+        Mockito.doReturn(Mono.error(new ApiErrorResponseException(mock)))
+            .when(client).addLink(Mockito.any(), Mockito.any());
 
         assertEquals("Ссылка уже отслеживается", trackCommand.handle(update).getParameters().get("text"));
     }
@@ -52,10 +60,13 @@ public class TrackCommandTest extends CommandTest {
     @Test
     public void assertThatAddUniqueLinkReturnedRightResponse() {
         Mockito.doReturn("/track https://github.com").when(message).text();
-        userChatRepository.add(new UserChat(chatId, new ArrayList<>()));
+
+        AddLinkRequest request = Mockito.spy(new AddLinkRequest(URI.create("https://github.com")));
+        Mockito.doReturn(Mono.just(ResponseEntity.ok().body(new LinkResponse(0L, request.link()))))
+            .when(client).addLink(Mockito.any(), Mockito.any());
 
         assertEquals(
-            "Ссылка успешно добавлена в отслеживаемые",
+            "[Ссылка](%s) успешно добавлена в отслеживаемые".formatted(request.link()),
             trackCommand.handle(update).getParameters().get("text")
         );
     }
