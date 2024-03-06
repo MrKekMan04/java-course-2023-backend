@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS link
 --changeset MrKekMan04:3
 CREATE TABLE IF NOT EXISTS assignment
 (
-    chat_id BIGINT REFERENCES telegram_chat (id),
-    link_id BIGINT REFERENCES link (id),
+    chat_id BIGINT REFERENCES telegram_chat (id) ON DELETE CASCADE,
+    link_id BIGINT REFERENCES link (id) ON DELETE CASCADE,
     PRIMARY KEY (chat_id, link_id)
 )
