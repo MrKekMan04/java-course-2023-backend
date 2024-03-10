@@ -1,16 +1,43 @@
 package edu.java.configuration;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import edu.java.entity.dto.LinkUpdateRequest;
+import edu.java.service.LinkService;
+import edu.java.service.client.BotClient;
+import edu.java.util.client.BaseClientProcessor;
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.Objects;
+import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class LinkUpdaterScheduler {
-    public static final Logger LOGGER = LogManager.getLogger();
+    private final List<BaseClientProcessor> clientProcessors;
+    private final LinkService linkService;
+    private final BotClient botClient;
+    private final ApplicationConfig config;
 
     @Scheduled(fixedDelayString = "PT${app.scheduler.interval}")
     public void update() {
-        LOGGER.info("Update method was invoked");
+        linkService.listAllWithInterval(config.scheduler().linkLastCheckInterval()).forEach(link -> {
+            for (BaseClientProcessor clientProcessor : clientProcessors) {
+                if (clientProcessor.isCandidate(link.getUrl())) {
+                    clientProcessor.getUpdate(link)
+                        .filter(Objects::nonNull)
+                        .map(update -> new LinkUpdateRequest(
+                            link.getId(),
+                            link.getUrl(),
+                            update,
+                            linkService.getAllChatsForLink(link.getId())
+                        ))
+                        .subscribe(botClient::sendUpdate);
+
+                    linkService.updateLink(link.setLastUpdatedAt(OffsetDateTime.now()));
+                    break;
+                }
+            }
+        });
     }
 }
