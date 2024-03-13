@@ -32,7 +32,8 @@ public class LinkUpdaterScheduler {
                             update,
                             linkService.getAllChatsForLink(link.getId())
                         ))
-                        .subscribe(botClient::sendUpdate);
+                        .flatMap(botClient::sendUpdate)
+                        .subscribe();
 
                     linkService.updateLink(link.setLastUpdatedAt(OffsetDateTime.now()));
                     break;
