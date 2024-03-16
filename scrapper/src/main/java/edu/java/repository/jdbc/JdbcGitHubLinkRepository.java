@@ -2,6 +2,7 @@ package edu.java.repository.jdbc;
 
 import edu.java.entity.GitHubLink;
 import edu.java.entity.Link;
+import edu.java.repository.SpecificLinkRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -10,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @RequiredArgsConstructor
-public class JdbcGitHubLinkRepository implements JdbcSpecificLinkRepository<GitHubLink> {
+public class JdbcGitHubLinkRepository implements SpecificLinkRepository<GitHubLink> {
     private final JdbcTemplate jdbcTemplate;
     private static final String SELECT_LINK_BY_ID = "SELECT * FROM github_link WHERE id=?";
     private static final String UPDATE_LINK = "UPDATE github_link SET default_branch=?, forks_count=? WHERE id=?";

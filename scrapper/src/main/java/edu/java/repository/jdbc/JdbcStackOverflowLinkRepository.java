@@ -2,6 +2,7 @@ package edu.java.repository.jdbc;
 
 import edu.java.entity.Link;
 import edu.java.entity.StackOverflowLink;
+import edu.java.repository.SpecificLinkRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -10,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @RequiredArgsConstructor
-public class JdbcStackOverflowLinkRepository implements JdbcSpecificLinkRepository<StackOverflowLink> {
+public class JdbcStackOverflowLinkRepository implements SpecificLinkRepository<StackOverflowLink> {
     private static final String SELECT_LINK_BY_ID = "SELECT * FROM stackoverflow_link WHERE id=?";
     private static final String UPDATE_LINK = "UPDATE stackoverflow_link SET answer_count=?, score=? WHERE id=?";
     private static final String ADD_LINK =

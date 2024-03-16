@@ -1,8 +1,8 @@
-package edu.java.repository.jdbc;
+package edu.java.repository;
 
 import edu.java.entity.Link;
 
-public interface JdbcSpecificLinkRepository<L extends Link> {
+public interface SpecificLinkRepository<L extends Link> {
     L getLink(Link link);
 
     L addLink(L link);
