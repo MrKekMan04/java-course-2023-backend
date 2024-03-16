@@ -9,7 +9,7 @@ import edu.java.exception.LinkNotTrackingException;
 import edu.java.exception.TelegramChatNotExistsException;
 import edu.java.repository.jdbc.JdbcLinkRepository;
 import edu.java.service.LinkService;
-import edu.java.util.client.BaseClientProcessor;
+import edu.java.util.LinkUtil;
 import java.net.URI;
 import java.time.Duration;
 import java.time.OffsetDateTime;
@@ -25,13 +25,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class JdbcLinkService implements LinkService {
     private final JdbcLinkRepository linkRepository;
-    private final List<BaseClientProcessor> clientProcessors;
+    private final LinkUtil linkUtil;
 
     @Override
     public LinkResponse add(Long tgChatId, URI url) {
         Link link;
 
-        if (!isUrlSupports(url)) {
+        if (!linkUtil.isUrlSupported(url)) {
             throw new LinkNotSupportedException(url);
         }
 
@@ -89,9 +89,5 @@ public class JdbcLinkService implements LinkService {
     @Override
     public void updateLink(Link link) {
         linkRepository.updateLink(link);
-    }
-
-    private boolean isUrlSupports(URI url) {
-        return clientProcessors.stream().anyMatch(clientProcessor -> clientProcessor.isCandidate(url));
     }
 }
