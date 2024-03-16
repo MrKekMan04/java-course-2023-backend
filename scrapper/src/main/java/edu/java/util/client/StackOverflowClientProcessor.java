@@ -20,12 +20,12 @@ public class StackOverflowClientProcessor extends BaseClientProcessor {
 
     public StackOverflowClientProcessor(
         StackOverflowClient stackOverflowClient,
-        StackOverflowLinkService stackOverflowLinkService
+        StackOverflowLinkService jooqStackOverflowLinkService
     ) {
         super("stackoverflow.com");
 
         this.stackOverflowClient = stackOverflowClient;
-        this.stackOverflowLinkService = stackOverflowLinkService;
+        this.stackOverflowLinkService = jooqStackOverflowLinkService;
     }
 
     @Override
