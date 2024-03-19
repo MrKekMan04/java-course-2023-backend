@@ -17,11 +17,11 @@ public class GitHubClientProcessor extends BaseClientProcessor {
     private final GitHubClient gitHubClient;
     private final GitHubLinkService gitHubLinkService;
 
-    public GitHubClientProcessor(GitHubClient gitHubClient, GitHubLinkService jooqGitHubLinkService) {
+    public GitHubClientProcessor(GitHubClient gitHubClient, GitHubLinkService gitHubLinkService) {
         super("github.com");
 
         this.gitHubClient = gitHubClient;
-        this.gitHubLinkService = jooqGitHubLinkService;
+        this.gitHubLinkService = gitHubLinkService;
     }
 
     @Override
