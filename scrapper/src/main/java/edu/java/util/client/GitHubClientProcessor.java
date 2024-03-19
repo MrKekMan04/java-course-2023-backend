@@ -17,11 +17,11 @@ public class GitHubClientProcessor extends BaseClientProcessor {
     private final GitHubClient gitHubClient;
     private final GitHubLinkService gitHubLinkService;
 
-    public GitHubClientProcessor(GitHubClient gitHubClient, GitHubLinkService jooqGitHubLinkService) {
+    public GitHubClientProcessor(GitHubClient gitHubClient, GitHubLinkService gitHubLinkService) {
         super("github.com");
 
         this.gitHubClient = gitHubClient;
-        this.gitHubLinkService = jooqGitHubLinkService;
+        this.gitHubLinkService = gitHubLinkService;
     }
 
     @Override
@@ -78,6 +78,9 @@ public class GitHubClientProcessor extends BaseClientProcessor {
 
         GitHubLink gitHubLink = new GitHubLink();
         gitHubLink.setId(link.getId());
+        gitHubLink.setUrl(link.getUrl());
+        gitHubLink.setLastUpdatedAt(link.getLastUpdatedAt());
+        gitHubLink.setTelegramChats(link.getTelegramChats());
 
         return gitHubLink;
     }

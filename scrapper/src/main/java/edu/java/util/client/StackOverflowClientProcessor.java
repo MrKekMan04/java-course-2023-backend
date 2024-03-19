@@ -20,12 +20,12 @@ public class StackOverflowClientProcessor extends BaseClientProcessor {
 
     public StackOverflowClientProcessor(
         StackOverflowClient stackOverflowClient,
-        StackOverflowLinkService jooqStackOverflowLinkService
+        StackOverflowLinkService stackOverflowLinkService
     ) {
         super("stackoverflow.com");
 
         this.stackOverflowClient = stackOverflowClient;
-        this.stackOverflowLinkService = jooqStackOverflowLinkService;
+        this.stackOverflowLinkService = stackOverflowLinkService;
     }
 
     @Override
@@ -89,6 +89,9 @@ public class StackOverflowClientProcessor extends BaseClientProcessor {
 
         StackOverflowLink stackOverflowLink = new StackOverflowLink();
         stackOverflowLink.setId(link.getId());
+        stackOverflowLink.setUrl(link.getUrl());
+        stackOverflowLink.setLastUpdatedAt(link.getLastUpdatedAt());
+        stackOverflowLink.setTelegramChats(link.getTelegramChats());
 
         return stackOverflowLink;
     }

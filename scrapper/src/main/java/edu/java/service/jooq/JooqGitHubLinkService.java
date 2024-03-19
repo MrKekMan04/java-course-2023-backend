@@ -6,9 +6,7 @@ import edu.java.repository.jooq.JooqGitHubLinkRepository;
 import edu.java.service.GitHubLinkService;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-@Service
 @RequiredArgsConstructor
 public class JooqGitHubLinkService implements GitHubLinkService {
     private final JooqGitHubLinkRepository jooqGitHubLinkRepository;

@@ -7,9 +7,7 @@ import edu.java.service.StackOverflowLinkService;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.stereotype.Service;
 
-@Service
 @RequiredArgsConstructor
 public class JdbcStackOverflowLinkService implements StackOverflowLinkService {
     private final JdbcStackOverflowLinkRepository jdbcStackOverflowLinkRepository;

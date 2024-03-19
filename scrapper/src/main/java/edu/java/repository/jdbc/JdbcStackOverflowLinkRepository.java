@@ -6,9 +6,7 @@ import edu.java.repository.SpecificLinkRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
 
-@Repository
 @RequiredArgsConstructor
 public class JdbcStackOverflowLinkRepository implements SpecificLinkRepository<StackOverflowLink> {
     private static final String SELECT_LINK_BY_ID = "SELECT * FROM stackoverflow_link WHERE id=?";
