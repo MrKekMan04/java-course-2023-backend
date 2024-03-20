@@ -1,5 +1,6 @@
 package edu.java.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -14,6 +15,8 @@ import lombok.experimental.Accessors;
 @Entity
 @Table(name = "stackoverflow_link")
 public class StackOverflowLink extends Link {
+    @Column(name = "answer_count")
     private Long answerCount;
+    @Column(name = "score")
     private Long score;
 }

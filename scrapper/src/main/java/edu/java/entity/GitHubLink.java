@@ -1,5 +1,6 @@
 package edu.java.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -14,6 +15,8 @@ import lombok.experimental.Accessors;
 @Entity
 @Table(name = "github_link")
 public class GitHubLink extends Link {
+    @Column(name = "default_branch")
     private String defaultBranch;
+    @Column(name = "forks_count")
     private Long forksCount;
 }

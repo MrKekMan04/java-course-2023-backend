@@ -1,5 +1,6 @@
 package edu.java.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
@@ -19,6 +20,7 @@ import lombok.experimental.Accessors;
 public class TelegramChat {
     @Id
     private Long id;
+    @Column(name = "registered_at")
     private OffsetDateTime registeredAt;
 
     @ManyToMany(mappedBy = "telegramChats")
