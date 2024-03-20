@@ -10,6 +10,6 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @Accessors(chain = true)
 public class GitHubLink extends Link {
-    String defaultBranch;
-    Long forksCount;
+    private String defaultBranch;
+    private Long forksCount;
 }
