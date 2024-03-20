@@ -19,31 +19,35 @@ public class ApiExceptionHandler {
     private final ExceptionConverter exceptionConverter;
 
     @ExceptionHandler(TelegramChatNotExistsException.class)
-    public ResponseEntity<ApiErrorResponse> telegramChatNotExistsException(TelegramChatNotExistsException exception) {
+    public ResponseEntity<ApiErrorResponse> handleTelegramChatNotExistsException(
+        TelegramChatNotExistsException exception
+    ) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
             .body(exceptionConverter.fromResponseStatus(exception, "Telegram Chat Not Exists"));
     }
 
     @ExceptionHandler(TelegramChatAlreadyRegistered.class)
-    public ResponseEntity<ApiErrorResponse> telegramChatAlreadyRegistered(TelegramChatAlreadyRegistered exception) {
+    public ResponseEntity<ApiErrorResponse> handleTelegramChatAlreadyRegistered(
+        TelegramChatAlreadyRegistered exception
+    ) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
             .body(exceptionConverter.fromResponseStatus(exception, "Telegram Chat Already Registered"));
     }
 
     @ExceptionHandler(LinkAlreadyTrackingException.class)
-    public ResponseEntity<ApiErrorResponse> linkAlreadyTrackingException(LinkAlreadyTrackingException exception) {
+    public ResponseEntity<ApiErrorResponse> handleLinkAlreadyTrackingException(LinkAlreadyTrackingException exception) {
         return ResponseEntity.badRequest()
             .body(exceptionConverter.fromResponseStatus(exception, "Link Already Tracking"));
     }
 
     @ExceptionHandler(LinkNotTrackingException.class)
-    public ResponseEntity<ApiErrorResponse> linkNotTrackingException(LinkNotTrackingException exception) {
+    public ResponseEntity<ApiErrorResponse> handleLinkNotTrackingException(LinkNotTrackingException exception) {
         return ResponseEntity.badRequest()
             .body(exceptionConverter.fromResponseStatus(exception, "Link Not Tracking"));
     }
 
     @ExceptionHandler(LinkNotSupportedException.class)
-    public ResponseEntity<ApiErrorResponse> linkNotSupportedException(LinkNotSupportedException exception) {
+    public ResponseEntity<ApiErrorResponse> handleLinkNotSupportedException(LinkNotSupportedException exception) {
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
             .body(exceptionConverter.fromResponseStatus(exception, "Link Not Supported"));
     }
