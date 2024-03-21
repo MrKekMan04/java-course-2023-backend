@@ -9,6 +9,7 @@ import java.util.Objects;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -58,6 +59,18 @@ public class JdbcGitHubLinkRepositoryTest extends IntegrationTest {
         assertEquals(gitHubLink.getId(), savedGitHubLink.getId());
         assertEquals(gitHubLink.getDefaultBranch(), savedGitHubLink.getDefaultBranch());
         assertEquals(gitHubLink.getForksCount(), savedGitHubLink.getForksCount());
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void assertThatAddGitHubLinkWhenReferenceLinkIsNotExistsThrowsException() {
+        GitHubLink gitHubLink = new GitHubLink()
+            .setDefaultBranch("master")
+            .setForksCount(1L);
+        gitHubLink.setId(Long.MAX_VALUE);
+
+        assertThrows(DataIntegrityViolationException.class, () -> gitHubLinkRepository.addLink(gitHubLink));
     }
 
     @Test

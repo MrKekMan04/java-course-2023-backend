@@ -9,6 +9,7 @@ import java.util.Objects;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -60,6 +61,21 @@ public class JdbcStackOverflowLinkRepositoryTest extends IntegrationTest {
         assertEquals(stackOverflowLink.getId(), savedStackOverflowLink.getId());
         assertEquals(stackOverflowLink.getAnswerCount(), savedStackOverflowLink.getAnswerCount());
         assertEquals(stackOverflowLink.getScore(), savedStackOverflowLink.getScore());
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void assertThatAddStackOverflowLinkWhenReferenceLinkIsNotExistsThrowsException() {
+        StackOverflowLink stackOverflowLink = new StackOverflowLink()
+            .setAnswerCount(0L)
+            .setScore(1L);
+        stackOverflowLink.setId(Long.MAX_VALUE);
+
+        assertThrows(
+            DataIntegrityViolationException.class,
+            () -> stackOverflowLinkRepository.addLink(stackOverflowLink)
+        );
     }
 
     @Test
