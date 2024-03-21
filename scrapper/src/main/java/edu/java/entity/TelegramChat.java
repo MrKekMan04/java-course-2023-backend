@@ -1,6 +1,6 @@
 package edu.java.entity;
 
-import java.util.List;
+import java.time.OffsetDateTime;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
@@ -10,5 +10,5 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class TelegramChat {
     private Long id;
-    private List<Link> links;
+    private OffsetDateTime registeredAt;
 }
