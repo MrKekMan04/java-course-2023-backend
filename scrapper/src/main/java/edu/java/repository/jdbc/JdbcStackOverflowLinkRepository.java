@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @RequiredArgsConstructor
@@ -20,7 +19,6 @@ public class JdbcStackOverflowLinkRepository implements SpecificLinkRepository<S
     private final JdbcTemplate jdbcTemplate;
 
     @Override
-    @Transactional
     public StackOverflowLink getLink(Link link) {
         return jdbcTemplate.queryForObject(
             SELECT_LINK_BY_ID,
@@ -30,7 +28,6 @@ public class JdbcStackOverflowLinkRepository implements SpecificLinkRepository<S
     }
 
     @Override
-    @Transactional
     public StackOverflowLink addLink(StackOverflowLink link) {
         return jdbcTemplate.queryForObject(
             ADD_LINK,
@@ -42,7 +39,6 @@ public class JdbcStackOverflowLinkRepository implements SpecificLinkRepository<S
     }
 
     @Override
-    @Transactional
     public void updateLink(StackOverflowLink link) {
         jdbcTemplate.update(UPDATE_LINK, link.getAnswerCount(), link.getScore(), link.getId());
     }

@@ -6,7 +6,6 @@ import edu.java.repository.SpecificLinkRepository;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import static ru.tinkoff.edu.java.scrapper.domain.jooq.Tables.STACKOVERFLOW_LINK;
 
 @Repository
@@ -15,7 +14,6 @@ public class JooqStackOverflowLinkRepository implements SpecificLinkRepository<S
     private final DSLContext dslContext;
 
     @Override
-    @Transactional
     public StackOverflowLink getLink(Link link) {
         return dslContext.select(STACKOVERFLOW_LINK.fields())
             .from(STACKOVERFLOW_LINK)
@@ -24,7 +22,6 @@ public class JooqStackOverflowLinkRepository implements SpecificLinkRepository<S
     }
 
     @Override
-    @Transactional
     public StackOverflowLink addLink(StackOverflowLink link) {
         return dslContext.insertInto(
                 STACKOVERFLOW_LINK,
@@ -38,7 +35,6 @@ public class JooqStackOverflowLinkRepository implements SpecificLinkRepository<S
     }
 
     @Override
-    @Transactional
     public void updateLink(StackOverflowLink link) {
         dslContext.update(STACKOVERFLOW_LINK)
             .set(STACKOVERFLOW_LINK.ANSWER_COUNT, link.getAnswerCount())

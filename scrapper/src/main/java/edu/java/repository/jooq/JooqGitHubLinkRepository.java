@@ -6,7 +6,6 @@ import edu.java.repository.SpecificLinkRepository;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import static ru.tinkoff.edu.java.scrapper.domain.jooq.tables.GithubLink.GITHUB_LINK;
 
 @Repository
@@ -15,7 +14,6 @@ public class JooqGitHubLinkRepository implements SpecificLinkRepository<GitHubLi
     private final DSLContext dslContext;
 
     @Override
-    @Transactional
     public GitHubLink getLink(Link link) {
         return dslContext.select(GITHUB_LINK.fields())
             .from(GITHUB_LINK)
@@ -24,7 +22,6 @@ public class JooqGitHubLinkRepository implements SpecificLinkRepository<GitHubLi
     }
 
     @Override
-    @Transactional
     public GitHubLink addLink(GitHubLink link) {
         return dslContext.insertInto(GITHUB_LINK, GITHUB_LINK.ID, GITHUB_LINK.DEFAULT_BRANCH, GITHUB_LINK.FORKS_COUNT)
             .values(link.getId(), link.getDefaultBranch(), link.getForksCount())
@@ -33,7 +30,6 @@ public class JooqGitHubLinkRepository implements SpecificLinkRepository<GitHubLi
     }
 
     @Override
-    @Transactional
     public void updateLink(GitHubLink link) {
         dslContext.update(GITHUB_LINK)
             .set(GITHUB_LINK.DEFAULT_BRANCH, link.getDefaultBranch())

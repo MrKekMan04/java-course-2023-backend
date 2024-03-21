@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @RequiredArgsConstructor
@@ -19,7 +18,6 @@ public class JdbcGitHubLinkRepository implements SpecificLinkRepository<GitHubLi
         "INSERT INTO github_link (id, default_branch, forks_count) VALUES (?,?,?) RETURNING *";
 
     @Override
-    @Transactional
     public GitHubLink getLink(Link link) {
         return jdbcTemplate.queryForObject(
             SELECT_LINK_BY_ID,
@@ -29,7 +27,6 @@ public class JdbcGitHubLinkRepository implements SpecificLinkRepository<GitHubLi
     }
 
     @Override
-    @Transactional
     public GitHubLink addLink(GitHubLink link) {
         return jdbcTemplate.queryForObject(
             ADD_LINK,
@@ -41,7 +38,6 @@ public class JdbcGitHubLinkRepository implements SpecificLinkRepository<GitHubLi
     }
 
     @Override
-    @Transactional
     public void updateLink(GitHubLink link) {
         jdbcTemplate.update(UPDATE_LINK, link.getDefaultBranch(), link.getForksCount(), link.getId());
     }
