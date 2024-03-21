@@ -5,9 +5,11 @@ import edu.java.scrapper.IntegrationTest;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Objects;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.Rollback;
@@ -89,5 +91,19 @@ public class JooqLinkRepositoryTest extends IntegrationTest {
         jdbcTemplate.update("INSERT INTO telegram_chat (id, registered_at) VALUES (?, NOW())", chatId);
         linkRepository.connectChatToLink(chatId, link.getId());
         assertEquals(List.of(link), linkRepository.findAllForChat(chatId));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void assertThatConnectNonExistsTelegramChatToLinkThrowsException() {
+        final Link savedLink = Objects.requireNonNull(linkRepository.add(new Link()
+            .setUrl(URI.create("https://link1.ru"))
+            .setLastUpdatedAt(OffsetDateTime.now())));
+
+        assertThrows(
+            DataIntegrityViolationException.class,
+            () -> linkRepository.connectChatToLink(10L, savedLink.getId())
+        );
     }
 }
