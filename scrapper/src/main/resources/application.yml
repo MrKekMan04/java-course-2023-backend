@@ -18,6 +18,9 @@ spring:
   application:
     name: scrapper
   datasource:
+    hikari:
+      maximum-pool-size: 50
+      minimum-idle: 20
     url: ${DB_URL:jdbc:postgresql://localhost:5432/scrapper}
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:postgres}
