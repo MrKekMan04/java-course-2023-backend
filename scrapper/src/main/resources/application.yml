@@ -13,6 +13,8 @@ app:
   database-access-type: jpa
 
 spring:
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
   application:
     name: scrapper
   datasource:
