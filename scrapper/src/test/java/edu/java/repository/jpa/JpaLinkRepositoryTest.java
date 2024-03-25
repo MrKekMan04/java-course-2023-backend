@@ -3,6 +3,10 @@ package edu.java.repository.jpa;
 import edu.java.entity.Link;
 import edu.java.entity.TelegramChat;
 import edu.java.scrapper.IntegrationTest;
+import java.net.URI;
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,11 +15,9 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.transaction.annotation.Transactional;
-import java.net.URI;
-import java.time.OffsetDateTime;
-import java.util.List;
-import java.util.Set;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 public class JpaLinkRepositoryTest extends IntegrationTest {
