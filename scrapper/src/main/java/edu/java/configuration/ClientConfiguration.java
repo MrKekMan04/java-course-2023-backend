@@ -9,6 +9,7 @@ import edu.java.service.client.StackOverflowClientBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.retry.support.RetryTemplate;
 
 @Configuration
 @RequiredArgsConstructor
@@ -16,23 +17,26 @@ public class ClientConfiguration {
     private final ApplicationConfig config;
 
     @Bean
-    public GitHubClient gitHubClient() {
+    public GitHubClient gitHubClient(RetryTemplate retryTemplate) {
         return new GitHubClientBuilder()
             .setBaseUrl(config.apiLink().gitHub())
+            .setRetryTemplate(retryTemplate)
             .build();
     }
 
     @Bean
-    public StackOverflowClient stackOverflowClient() {
+    public StackOverflowClient stackOverflowClient(RetryTemplate retryTemplate) {
         return new StackOverflowClientBuilder()
             .setBaseUrl(config.apiLink().stackOverflow())
+            .setRetryTemplate(retryTemplate)
             .build();
     }
 
     @Bean
-    public BotClient botClient() {
+    public BotClient botClient(RetryTemplate retryTemplate) {
         return new BotClientBuilder()
             .setBaseUrl(config.apiLink().bot())
+            .setRetryTemplate(retryTemplate)
             .build();
     }
 }

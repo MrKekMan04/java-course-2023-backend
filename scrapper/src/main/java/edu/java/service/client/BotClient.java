@@ -5,15 +5,20 @@ import edu.java.entity.dto.LinkUpdateRequest;
 import edu.java.exception.ApiErrorResponseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.retry.support.RetryTemplate;
 import reactor.core.publisher.Mono;
 
 public class BotClient extends BaseClient {
-    public BotClient(String baseUrl) {
+    private final RetryTemplate retryTemplate;
+
+    public BotClient(String baseUrl, RetryTemplate retryTemplate) {
         super(baseUrl);
+
+        this.retryTemplate = retryTemplate;
     }
 
     public Mono<ResponseEntity<Void>> sendUpdate(LinkUpdateRequest request) {
-        return client.post()
+        return retryTemplate.execute(context -> client.post()
             .uri("/updates")
             .bodyValue(request)
             .retrieve()
@@ -21,6 +26,6 @@ public class BotClient extends BaseClient {
                 HttpStatus.BAD_REQUEST::equals,
                 response -> response.bodyToMono(ApiErrorResponse.class).map(ApiErrorResponseException::new)
             )
-            .toBodilessEntity();
+            .toBodilessEntity());
     }
 }
