@@ -2,7 +2,7 @@ package edu.java.configuration;
 
 import edu.java.entity.dto.LinkUpdateRequest;
 import edu.java.service.LinkService;
-import edu.java.service.client.BotClient;
+import edu.java.service.LinkUpdateService;
 import edu.java.util.client.BaseClientProcessor;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -17,7 +17,7 @@ import reactor.core.scheduler.Schedulers;
 public class LinkUpdaterScheduler {
     private final List<BaseClientProcessor> clientProcessors;
     private final LinkService linkService;
-    private final BotClient botClient;
+    private final LinkUpdateService linkUpdateService;
     private final ApplicationConfig config;
 
     @Scheduled(fixedDelayString = "PT${app.scheduler.interval}")
@@ -34,8 +34,7 @@ public class LinkUpdaterScheduler {
                             update,
                             linkService.getAllChatsForLink(link.getId())
                         ))
-                        .flatMap(botClient::sendUpdate)
-                        .subscribe();
+                        .subscribe(linkUpdateService::sendUpdate);
                     linkService.updateLink(link.setLastUpdatedAt(OffsetDateTime.now()));
                     break;
                 }
