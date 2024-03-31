@@ -14,7 +14,9 @@ public record ApplicationConfig(
     ApiLink apiLink,
     DebugInformation debugInformation,
     AccessType databaseAccessType,
-    Retry retry
+    Retry retry,
+    KafkaConfigInfo kafkaConfigInfo,
+    Boolean useQueue
 ) {
     public record Scheduler(
         boolean enable,
@@ -65,6 +67,18 @@ public record ApplicationConfig(
                 Long maxIntervalMillis
             ) {
             }
+        }
+    }
+
+    public record KafkaConfigInfo(
+        String bootstrapServers,
+        UpdatesTopic updatesTopic
+    ) {
+        public record UpdatesTopic(
+            String name,
+            Integer partitions,
+            Integer replicas
+        ) {
         }
     }
 }

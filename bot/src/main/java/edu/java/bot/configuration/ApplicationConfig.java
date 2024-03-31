@@ -11,7 +11,8 @@ public record ApplicationConfig(
     @NotEmpty
     String telegramToken,
     ApiLink apiLink,
-    Retry retry
+    Retry retry,
+    KafkaConfigInfo kafkaConfigInfo
 ) {
     public record ApiLink(String scrapper) {
     }
@@ -48,6 +49,18 @@ public record ApplicationConfig(
                 Long maxIntervalMillis
             ) {
             }
+        }
+    }
+
+    public record KafkaConfigInfo(
+        String bootstrapServers,
+        UpdatesTopic updatesTopic
+    ) {
+        public record UpdatesTopic(
+            String name,
+            Integer partitions,
+            Integer replicas
+        ) {
         }
     }
 }
