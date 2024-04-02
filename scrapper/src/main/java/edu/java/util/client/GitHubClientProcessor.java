@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 @Component
 public class GitHubClientProcessor extends BaseClientProcessor {
@@ -32,9 +33,8 @@ public class GitHubClientProcessor extends BaseClientProcessor {
 
     @Override
     public Mono<String> getUpdate(Link link) {
-        Optional<GitHubLink> specificInfo = gitHubLinkService.getLink(link);
-
         return gitHubClient.getUserRepository(link.getUrl().getPath())
+            .publishOn(Schedulers.boundedElastic())
             .mapNotNull(response -> {
                 StringBuilder update = new StringBuilder();
 
@@ -42,6 +42,7 @@ public class GitHubClientProcessor extends BaseClientProcessor {
                     update.append("Репозиторий обновлён\n");
                 }
 
+                Optional<GitHubLink> specificInfo = gitHubLinkService.getLink(link);
                 boolean isDirty = false;
                 GitHubLink gitHubLink = getEntity(specificInfo, link);
 
@@ -78,9 +79,6 @@ public class GitHubClientProcessor extends BaseClientProcessor {
 
         GitHubLink gitHubLink = new GitHubLink();
         gitHubLink.setId(link.getId());
-        gitHubLink.setUrl(link.getUrl());
-        gitHubLink.setLastUpdatedAt(link.getLastUpdatedAt());
-        gitHubLink.setTelegramChats(link.getTelegramChats());
 
         return gitHubLink;
     }

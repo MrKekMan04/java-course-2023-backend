@@ -18,7 +18,8 @@ public class JpaStackOverflowLinkService implements StackOverflowLinkService {
 
     @Override
     public StackOverflowLink addLink(StackOverflowLink link) {
-        return jpaStackOverflowLinkRepository.save(link);
+        jpaStackOverflowLinkRepository.add(link.getId(), link.getAnswerCount(), link.getScore());
+        return link;
     }
 
     @Override

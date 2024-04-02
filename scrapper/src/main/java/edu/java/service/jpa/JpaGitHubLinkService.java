@@ -18,7 +18,8 @@ public class JpaGitHubLinkService implements GitHubLinkService {
 
     @Override
     public GitHubLink addLink(GitHubLink link) {
-        return jpaGitHubLinkRepository.save(link);
+        jpaGitHubLinkRepository.add(link.getId(), link.getDefaultBranch(), link.getForksCount());
+        return link;
     }
 
     @Override
