@@ -10,6 +10,7 @@ import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import reactor.core.scheduler.Schedulers;
 
 @Component
 @RequiredArgsConstructor
@@ -26,6 +27,7 @@ public class LinkUpdaterScheduler {
                 if (clientProcessor.isCandidate(link.getUrl())) {
                     clientProcessor.getUpdate(link)
                         .filter(Objects::nonNull)
+                        .publishOn(Schedulers.boundedElastic())
                         .map(update -> new LinkUpdateRequest(
                             link.getId(),
                             link.getUrl(),
