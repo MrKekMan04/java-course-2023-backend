@@ -24,8 +24,8 @@ import lombok.experimental.Accessors;
 
 @Getter
 @Setter
-@ToString(exclude = "telegramChats")
-@EqualsAndHashCode(exclude = "telegramChats")
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @Accessors(chain = true)
 @Entity
@@ -46,6 +46,8 @@ public class Link {
         joinColumns = @JoinColumn(name = "link_id"),
         inverseJoinColumns = @JoinColumn(name = "chat_id")
     )
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Set<TelegramChat> telegramChats = new HashSet<>();
 
     public void addTelegramChat(TelegramChat chat) {
