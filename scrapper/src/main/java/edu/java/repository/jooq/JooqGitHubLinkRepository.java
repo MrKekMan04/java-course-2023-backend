@@ -5,10 +5,8 @@ import edu.java.entity.Link;
 import edu.java.repository.SpecificLinkRepository;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
-import org.springframework.stereotype.Repository;
 import static ru.tinkoff.edu.java.scrapper.domain.jooq.tables.GithubLink.GITHUB_LINK;
 
-@Repository
 @RequiredArgsConstructor
 public class JooqGitHubLinkRepository implements SpecificLinkRepository<GitHubLink> {
     private final DSLContext dslContext;

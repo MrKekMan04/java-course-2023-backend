@@ -10,6 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 @Component
 public class StackOverflowClientProcessor extends BaseClientProcessor {
@@ -20,12 +21,12 @@ public class StackOverflowClientProcessor extends BaseClientProcessor {
 
     public StackOverflowClientProcessor(
         StackOverflowClient stackOverflowClient,
-        StackOverflowLinkService jooqStackOverflowLinkService
+        StackOverflowLinkService stackOverflowLinkService
     ) {
         super("stackoverflow.com");
 
         this.stackOverflowClient = stackOverflowClient;
-        this.stackOverflowLinkService = jooqStackOverflowLinkService;
+        this.stackOverflowLinkService = stackOverflowLinkService;
     }
 
     @Override
@@ -42,10 +43,9 @@ public class StackOverflowClientProcessor extends BaseClientProcessor {
             return Mono.empty();
         }
 
-        Optional<StackOverflowLink> specificInfo = stackOverflowLinkService.getLink(link);
-
         return stackOverflowClient.getQuestionsInfo(matcher.group("questionId"))
             .map(response -> response.items().getFirst())
+            .publishOn(Schedulers.boundedElastic())
             .mapNotNull(response -> {
                 StringBuilder update = new StringBuilder();
 
@@ -53,6 +53,7 @@ public class StackOverflowClientProcessor extends BaseClientProcessor {
                     update.append("Вопрос обновлён\n");
                 }
 
+                Optional<StackOverflowLink> specificInfo = stackOverflowLinkService.getLink(link);
                 boolean isDirty = false;
                 StackOverflowLink stackOverflowLink = getEntity(specificInfo, link);
 

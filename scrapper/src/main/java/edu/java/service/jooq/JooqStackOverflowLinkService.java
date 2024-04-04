@@ -6,9 +6,7 @@ import edu.java.repository.jooq.JooqStackOverflowLinkRepository;
 import edu.java.service.StackOverflowLinkService;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-@Service
 @RequiredArgsConstructor
 public class JooqStackOverflowLinkService implements StackOverflowLinkService {
     private final JooqStackOverflowLinkRepository jooqStackOverflowLinkRepository;

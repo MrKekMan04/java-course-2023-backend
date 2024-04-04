@@ -10,11 +10,17 @@ app:
     bot: ${BOT_BASE_URL:http://localhost:8090}
   debug-information:
     api-error-response-stack-trace-list-length: 5
+  database-access-type: jpa
 
 spring:
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
   application:
     name: scrapper
   datasource:
+    hikari:
+      maximum-pool-size: 50
+      minimum-idle: 20
     url: ${DB_URL:jdbc:postgresql://localhost:5432/scrapper}
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:postgres}

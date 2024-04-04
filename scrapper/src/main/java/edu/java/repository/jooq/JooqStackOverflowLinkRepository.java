@@ -5,10 +5,8 @@ import edu.java.entity.StackOverflowLink;
 import edu.java.repository.SpecificLinkRepository;
 import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
-import org.springframework.stereotype.Repository;
 import static ru.tinkoff.edu.java.scrapper.domain.jooq.Tables.STACKOVERFLOW_LINK;
 
-@Repository
 @RequiredArgsConstructor
 public class JooqStackOverflowLinkRepository implements SpecificLinkRepository<StackOverflowLink> {
     private final DSLContext dslContext;

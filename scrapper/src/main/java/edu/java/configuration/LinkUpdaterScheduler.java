@@ -10,32 +10,33 @@ import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import reactor.core.scheduler.Schedulers;
 
 @Component
 @RequiredArgsConstructor
 public class LinkUpdaterScheduler {
     private final List<BaseClientProcessor> clientProcessors;
-    private final LinkService jooqLinkService;
+    private final LinkService linkService;
     private final BotClient botClient;
     private final ApplicationConfig config;
 
     @Scheduled(fixedDelayString = "PT${app.scheduler.interval}")
     public void update() {
-        jooqLinkService.listAllWithInterval(config.scheduler().linkLastCheckInterval()).forEach(link -> {
+        linkService.listAllWithInterval(config.scheduler().linkLastCheckInterval()).forEach(link -> {
             for (BaseClientProcessor clientProcessor : clientProcessors) {
                 if (clientProcessor.isCandidate(link.getUrl())) {
                     clientProcessor.getUpdate(link)
                         .filter(Objects::nonNull)
+                        .publishOn(Schedulers.boundedElastic())
                         .map(update -> new LinkUpdateRequest(
                             link.getId(),
                             link.getUrl(),
                             update,
-                            jooqLinkService.getAllChatsForLink(link.getId())
+                            linkService.getAllChatsForLink(link.getId())
                         ))
                         .flatMap(botClient::sendUpdate)
                         .subscribe();
-
-                    jooqLinkService.updateLink(link.setLastUpdatedAt(OffsetDateTime.now()));
+                    linkService.updateLink(link.setLastUpdatedAt(OffsetDateTime.now()));
                     break;
                 }
             }

@@ -7,9 +7,7 @@ import edu.java.service.GitHubLinkService;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.stereotype.Service;
 
-@Service
 @RequiredArgsConstructor
 public class JdbcGitHubLinkService implements GitHubLinkService {
     private final JdbcGitHubLinkRepository jdbcGitHubLinkRepository;

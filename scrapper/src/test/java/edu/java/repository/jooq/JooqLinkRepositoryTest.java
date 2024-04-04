@@ -13,6 +13,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -26,6 +28,11 @@ public class JooqLinkRepositoryTest extends IntegrationTest {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @DynamicPropertySource
+    public static void setJooqAccessType(DynamicPropertyRegistry registry) {
+        registry.add("app.database-access-type", () -> "jooq");
+    }
 
     @Test
     @Transactional
