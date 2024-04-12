@@ -1,6 +1,7 @@
 package edu.java.bot.configuration;
 
 import jakarta.validation.constraints.NotEmpty;
+import java.util.List;
 import java.util.Set;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
@@ -53,7 +54,7 @@ public record ApplicationConfig(
     }
 
     public record KafkaConfigInfo(
-        String bootstrapServers,
+        List<String> bootstrapServers,
         UpdatesTopic updatesTopic
     ) {
         public record UpdatesTopic(

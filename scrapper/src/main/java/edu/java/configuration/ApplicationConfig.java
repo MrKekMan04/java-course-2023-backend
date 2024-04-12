@@ -2,6 +2,7 @@ package edu.java.configuration;
 
 import jakarta.validation.constraints.NotNull;
 import java.time.Duration;
+import java.util.List;
 import java.util.Set;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
@@ -71,7 +72,7 @@ public record ApplicationConfig(
     }
 
     public record KafkaConfigInfo(
-        String bootstrapServers,
+        List<String> bootstrapServers,
         UpdatesTopic updatesTopic
     ) {
         public record UpdatesTopic(
