@@ -25,6 +25,16 @@ app:
         initial-interval-millis: 1000
         multiplier: 2
         max-interval-millis: 100000
+  kafka-config-info:
+    bootstrap-servers:
+      - ${DOCKER_HOST_IP:127.0.0.1}:9092
+      - ${DOCKER_HOST_IP:127.0.0.1}:9093
+      - ${DOCKER_HOST_IP:127.0.0.1}:9094
+    updates-topic:
+      name: scrapper.updates
+      partitions: 2
+      replicas: 2
+  use-queue: true
 
 
 spring:

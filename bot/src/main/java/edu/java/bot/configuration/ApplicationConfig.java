@@ -1,6 +1,7 @@
 package edu.java.bot.configuration;
 
 import jakarta.validation.constraints.NotEmpty;
+import java.util.List;
 import java.util.Set;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
@@ -11,7 +12,8 @@ public record ApplicationConfig(
     @NotEmpty
     String telegramToken,
     ApiLink apiLink,
-    Retry retry
+    Retry retry,
+    KafkaConfigInfo kafkaConfigInfo
 ) {
     public record ApiLink(String scrapper) {
     }
@@ -48,6 +50,18 @@ public record ApplicationConfig(
                 Long maxIntervalMillis
             ) {
             }
+        }
+    }
+
+    public record KafkaConfigInfo(
+        List<String> bootstrapServers,
+        UpdatesTopic updatesTopic
+    ) {
+        public record UpdatesTopic(
+            String name,
+            Integer partitions,
+            Integer replicas
+        ) {
         }
     }
 }

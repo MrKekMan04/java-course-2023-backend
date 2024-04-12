@@ -2,6 +2,7 @@ package edu.java.configuration;
 
 import jakarta.validation.constraints.NotNull;
 import java.time.Duration;
+import java.util.List;
 import java.util.Set;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
@@ -14,7 +15,9 @@ public record ApplicationConfig(
     ApiLink apiLink,
     DebugInformation debugInformation,
     AccessType databaseAccessType,
-    Retry retry
+    Retry retry,
+    KafkaConfigInfo kafkaConfigInfo,
+    Boolean useQueue
 ) {
     public record Scheduler(
         boolean enable,
@@ -65,6 +68,18 @@ public record ApplicationConfig(
                 Long maxIntervalMillis
             ) {
             }
+        }
+    }
+
+    public record KafkaConfigInfo(
+        List<String> bootstrapServers,
+        UpdatesTopic updatesTopic
+    ) {
+        public record UpdatesTopic(
+            String name,
+            Integer partitions,
+            Integer replicas
+        ) {
         }
     }
 }
