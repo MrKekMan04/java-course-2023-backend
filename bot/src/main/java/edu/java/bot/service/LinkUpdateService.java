@@ -4,6 +4,7 @@ import com.pengrad.telegrambot.model.request.ParseMode;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.bot.Bot;
 import edu.java.bot.entity.dto.LinkUpdateRequest;
+import io.micrometer.core.instrument.Counter;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 public class LinkUpdateService {
     private static final Logger LOGGER = LogManager.getLogger();
     private final Bot bot;
+    private final Counter processedMessagesCounter;
 
     public void sendUpdateNotification(LinkUpdateRequest request) {
         request.tgChatIds()
@@ -28,5 +30,7 @@ public class LinkUpdateService {
                     )
                 ).parseMode(ParseMode.Markdown));
             });
+
+        processedMessagesCounter.increment();
     }
 }
