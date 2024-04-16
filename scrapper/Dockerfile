@@ -1,9 +1,16 @@
+FROM openjdk:21 AS builder
+
+ARG JAR_FILE=target/*.jar
+
+COPY $JAR_FILE app.jar
+
+RUN java -Djarmode=layertools -jar app.jar extract
+
 FROM openjdk:21
 
-WORKDIR /app
+COPY --from=builder dependencies/ ./
+COPY --from=builder snapshot-dependencies/ ./
+COPY --from=builder spring-boot-loader/ ./
+COPY --from=builder application/ ./
 
-COPY target/scrapper.jar app.jar
-
-ENV JAVA_OPTS=""
-
-ENTRYPOINT exec java $JAVA_OPTS -jar app.jar
+ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]
